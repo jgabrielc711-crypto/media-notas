@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Data e Hora</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #eaf3ff; text-align: center; padding: 60px 20px; }
+        .painel { max-width: 500px; margin: auto; padding: 35px; background: white; border-radius: 15px; }
+        #dataHora { font-size: 28px; font-weight: bold; color: #1d4ed8; margin: 10px 0 25px; }
+        a { display: inline-block; padding: 12px 20px; background: #2563eb; color: white; text-decoration: none; border-radius: 8px; margin: 4px; }
+        #sair { background: #64748b; }
+    </style>
+</head>
+<body>
+    <div class="painel">
+        <p id="dataHora"></p>
+        <script>
+            function mostrar() {
+                var d = new Date();
+                document.getElementById("dataHora").textContent =
+                    d.toLocaleDateString("pt-BR") + " - " + d.toLocaleTimeString("pt-BR");
+            }
+            mostrar();
+            setInterval(mostrar, 1000);
+        </script>
+        <a href="index.html">Voltar para a média</a>
+        <a href="index.html" id="sair">Sair (voltar ao login)</a>
+        <script>
+            document.getElementById("sair").addEventListener("click", function () {
+                try { sessionStorage.removeItem("logado"); } catch (err) {}
+            });
+        </script>
+    </div>
+</body>
+</html>
