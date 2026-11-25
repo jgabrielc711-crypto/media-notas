@@ -1,0 +1,85 @@
+const MEDIA_APROVACAO = 7;
+
+// Lê os campos, valida e devolve a média (ou null se houver erro)
+function calcularMedia() {
+    const erro = document.getElementById("erro");
+    const nome = document.getElementById("nome").value.trim();
+    const campos = ["nota1", "nota2", "nota3"];
+    const notas = [];
+
+    erro.textContent = "";
+
+    if (nome === "") {
+        erro.textContent = "Erro: informe o nome do aluno.";
+        return null;
+    }
+
+    for (let i = 0; i < campos.length; i++) {
+        const texto = document.getElementById(campos[i]).value;
+
+        // A nota 3 é opcional
+        if (texto === "" && i === 2) continue;
+
+        const nota = parseFloat(texto);
+        if (texto === "" || isNaN(nota) || nota < 0 || nota > 10) {
+            erro.textContent = "Erro: a nota " + (i + 1) + " é inválida. Use um valor de 0 a 10.";
+            return null;
+        }
+        notas.push(nota);
+    }
+
+    let soma = 0;
+    for (let i = 0; i < notas.length; i++) {
+        soma += notas[i];
+    }
+    return soma / notas.length;
+}
+
+function mostrarMedia() {
+    const media = calcularMedia();
+    if (media === null) return;
+
+    document.getElementById("resNome").textContent = document.getElementById("nome").value.trim();
+    document.getElementById("resMedia").textContent = media.toFixed(2);
+}
+
+function mostrarSituacao() {
+    const media = calcularMedia();
+    if (media === null) return;
+
+    const situacao = document.getElementById("resSituacao");
+    document.getElementById("resNome").textContent = document.getElementById("nome").value.trim();
+    document.getElementById("resMedia").textContent = media.toFixed(2);
+
+    if (media >= MEDIA_APROVACAO) {
+        situacao.textContent = "Aprovado";
+        situacao.className = "aprovado";
+    } else {
+        situacao.textContent = "Reprovado";
+        situacao.className = "reprovado";
+    }
+}
+
+function limpar() {
+    document.getElementById("formNotas").reset();
+    document.getElementById("erro").textContent = "";
+    document.getElementById("resNome").textContent = "";
+    document.getElementById("resMedia").textContent = "";
+    document.getElementById("resSituacao").textContent = "";
+    document.getElementById("resSituacao").className = "";
+    document.getElementById("nome").focus();
+}
+
+// Data e hora na página principal
+function atualizarDataHoraIndex() {
+    const agora = new Date();
+    document.getElementById("dataHoraIndex").textContent =
+        agora.toLocaleDateString("pt-BR") + " - " + agora.toLocaleTimeString("pt-BR");
+}
+
+document.getElementById("btnMedia").addEventListener("click", mostrarMedia);
+document.getElementById("btnSituacao").addEventListener("click", mostrarSituacao);
+document.getElementById("btnLimpar").addEventListener("click", limpar);
+
+atualizarDataHoraIndex();
+setInterval(atualizarDataHoraIndex, 1000);
